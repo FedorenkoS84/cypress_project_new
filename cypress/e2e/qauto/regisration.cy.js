@@ -221,6 +221,7 @@ describe("Registration Form", () => {
       );
     });
   });
+  //Test3 - Button Register
   context("Button Register", () => {
     it("Register button should be enabled when form is valid", () => {
       const uniqueEmail = `test${Date.now()}@gmail.com`;
