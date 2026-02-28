@@ -1,0 +1,124 @@
+{
+  "stats": {
+    "suites": 2,
+    "tests": 1,
+    "passes": 1,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-02-25T12:00:19.935Z",
+    "end": "2026-02-25T12:00:24.270Z",
+    "duration": 4335,
+    "testsRegistered": 1,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "57836484-0cd5-4b80-851d-fc05a63795a2",
+      "title": "",
+      "fullFile": "cypress\\e2e\\qauto\\sign-in.cy.js",
+      "file": "cypress\\e2e\\qauto\\sign-in.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "bfebe068-0aa5-4468-84ae-befa2222feef",
+          "title": "Signin Form",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [],
+          "suites": [
+            {
+              "uuid": "698eceb3-e88b-4aef-a41a-41d0304eff19",
+              "title": "Sign in Process",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "Success sign in",
+                  "fullTitle": "Signin Form Sign in Process Success sign in",
+                  "timedOut": null,
+                  "duration": 4266,
+                  "state": "passed",
+                  "speed": "fast",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": null,
+                  "code": "_SignInForm.default.login(_users.default.correctUser.email, _users.default.correctUser.password);\n_GaragePage.default.pageTitle.should(\"have.text\", \"Garage\");",
+                  "err": {},
+                  "uuid": "4afc6e78-9152-4e5c-890a-6cdaf2725982",
+                  "parentUUID": "698eceb3-e88b-4aef-a41a-41d0304eff19",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [
+                "4afc6e78-9152-4e5c-890a-6cdaf2725982"
+              ],
+              "failures": [],
+              "pending": [],
+              "skipped": [],
+              "duration": 4266,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            }
+          ],
+          "passes": [],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 0,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "overwrite": false,
+        "html": false,
+        "json": true,
+        "reportDir": "cypress\\reports\\html\\.jsons"
+      },
+      "version": "6.3.2"
+    }
+  }
+}
