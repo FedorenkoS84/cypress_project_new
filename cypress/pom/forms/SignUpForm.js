@@ -1,69 +1,85 @@
-class SignUpForm {
-  elements = {
-    nameInput: () => cy.get("#signupName"),
-    lastNameInput: () => cy.get("#signupLastName"),
-    emailInput: () => cy.get("#signupEmail"),
-    passwordInput: () => cy.get("#signupPassword"),
-    repeatPasswordInput: () => cy.get("#signupRepeatPassword"),
-    registerButton: () => cy.contains(".modal-content button", "Register"),
-  };
+//
 
+class SignUpForm {
+  get name() {
+    return cy.get("#signupName");
+  }
+  get lastName() {
+    return cy.get("#signupLastName");
+  }
+  get email() {
+    return cy.get("#signupEmail");
+  }
+  get password() {
+    return cy.get("#signupPassword");
+  }
+  get repeatPassword() {
+    return cy.get("#signupRepeatPassword");
+  }
+  get registerBtn() {
+    return cy.get(".modal-content .btn-primary");
+  }
+  // get lastNameError() {
+  //   return this.lastName.parent(".invalid-feedback");
+  // }
+  // 🔹 ОНОВЛЕНО: Тепер ми не просто шукаємо всі класи, а чекаємо на видиму помилку
+  get wrongInputErrorMessage() {
+    return cy.get(".invalid-feedback");
+  }
+
+  // 🔹 ОНОВЛЕНО: Додаємо перевірку видимості, щоб Cypress встиг знайти текст
+  verifyErrorMessage(expectedText) {
+    this.wrongInputErrorMessage
+      .should("be.visible")
+      .should("have.text", expectedText);
+  }
+
+  // 🔹 ОНОВЛЕНО: Додаємо clear() та blur(), щоб валідація спрацьовувала стабільно
+  triggerErrorOnField(field) {
+    field.focus().blur();
+    // cy.get("body").click();
+  }
+
+  verifyBorderColor(field, color) {
+    field.should("have.css", "border-color", color);
+  }
+
+  // Методи введення: додаємо .clear() про всяк випадок і .blur() для спрацювання помилки
   typeName(value) {
-    this.elements.nameInput().clear().type(value);
-    return this;
+    this.name.clear().type(value).blur();
   }
 
   typeLastName(value) {
-    this.elements.lastNameInput().clear().type(value);
-    return this;
+    this.lastName.clear().type(value).blur();
   }
 
   typeEmail(value) {
-    this.elements.emailInput().clear().type(value);
-    return this;
+    this.email.clear().type(value).blur();
   }
 
   typePassword(value) {
-    this.elements.passwordInput().clear().type(value);
-    return this;
+    this.password.clear().type(value).blur();
   }
 
   typeRepeatPassword(value) {
-    this.elements.repeatPasswordInput().clear().type(value);
-    return this;
+    this.repeatPassword.clear().type(value).blur();
   }
 
-  focus(field) {
-    this.elements[field + "Input"]().focus();
-    return this;
+  fillFullForm({ name, lastName, email, password, repeatPassword }) {
+    if (name) this.typeName(name);
+    if (lastName) this.typeLastName(lastName);
+    if (email) this.typeEmail(email);
+    if (password) this.typePassword(password);
+    if (repeatPassword) this.typeRepeatPassword(repeatPassword);
   }
 
-  blur(field) {
-    this.elements[field + "Input"]().blur();
-    return this;
+  submit() {
+    this.registerBtn.click();
   }
 
-  shouldHaveError(field, message) {
-    this.elements[field + "Input"]()
-      .parent()
-      .find(".invalid-feedback")
-      .should("have.text", message);
-    return this;
-  }
-
-  shouldHaveBorderColor(field, color) {
-    this.elements[field + "Input"]().should("have.css", "border-color", color);
-    return this;
-  }
-
-  register(user) {
-    this.typeName(user.name)
-      .typeLastName(user.lastName)
-      .typeEmail(user.email)
-      .typePassword(user.password)
-      .typeRepeatPassword(user.password)
-      .elements.registerButton()
-      .click();
+  register(data) {
+    this.fillFullForm(data);
+    this.submit();
   }
 }
 

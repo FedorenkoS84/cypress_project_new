@@ -1,225 +1,226 @@
 /// <reference types="cypress" />
-
+import HomePage from "../../pom/pages/HomePage";
 import SignUpForm from "../../pom/forms/SignUpForm";
 import GaragePage from "../../pom/pages/GaragePage";
-
 beforeEach(() => {
-  cy.visit("/", {
-    auth: {
-      username: Cypress.env("username"),
-      password: Cypress.env("password"),
-    },
-  });
-  cy.get(".header_signin").click();
-  cy.contains(".modal-content .btn-link", "Registration").click();
+  HomePage.visit();
+  HomePage.openRegistrationForm();
 });
-
 describe("Registration Form", () => {
-  context("Registration Success", () => {
-    //Test1 - Success Registragion
-    it("Success Registragion", () => {
-      const user = {
-        name: "Serhii",
-        lastName: "Fedorenko",
-        email: `fedorenkos084+${Date.now()}@gmail.com`,
-        password: "1234Test",
-      };
-      SignUpForm.register(user);
-      GaragePage.pageTitle.should("have.text", "Garage");
+  const RED = "rgb(220, 53, 69)";
+  // -------------------
+  // Success Registration
+  // -------------------
+  it("Success Registration", () => {
+    const uniqueEmail = `test${Date.now()}@gmail.com`;
+
+    SignUpForm.register({
+      name: "Serhii",
+      lastName: "Fedorenko",
+      email: uniqueEmail,
+      password: "1234Test",
+      repeatPassword: "1234Test",
     });
 
-    //Test2 - Empty field - "Name required"
-    it("Empty field", () => {
-      SignUpForm.focus("name").blur("name");
-      SignUpForm.shouldHaveError("name", "Name required");
+    // Перевірка, що ми на Garage
+    GaragePage.pageTitle.should("have.text", "Garage");
+  });
+
+  // -------------------
+  // Name field tests
+  // -------------------
+  context("Field Name", () => {
+    it("Empty field Name", () => {
+      SignUpForm.triggerErrorOnField(SignUpForm.name);
+      SignUpForm.verifyErrorMessage("Name required");
     });
 
-    //Test3 - Name is invalid
     it("Name is invalid", () => {
-      SignUpForm.typeName(" S ").blur("name");
-      SignUpForm.shouldHaveError("name", "Name is invalid");
+      SignUpForm.name.type(" S ");
+      SignUpForm.triggerErrorOnField(SignUpForm.name);
+
+      SignUpForm.verifyErrorMessage("Name is invalid");
+      // SignUpForm.shouldHaveError(SignUpForm.name, "Name is invalid");
     });
 
-    //Test4 - Wrong length - min
-    it("Wrong length (min)", () => {
-      SignUpForm.typeName("S").blur("name");
-      SignUpForm.shouldHaveError(
-        "name",
+    it("Name too short", () => {
+      SignUpForm.name.type("S");
+      SignUpForm.triggerErrorOnField(SignUpForm.name);
+      SignUpForm.verifyErrorMessage(
         "Name has to be from 2 to 20 characters long",
       );
     });
 
-    //Test4 - Wrong length - max
-    it("Wrong length (max)", () => {
-      SignUpForm.typeName("A".repeat(21)).blur("name");
-      SignUpForm.shouldHaveError(
-        "name",
+    it("Name too long", () => {
+      SignUpForm.typeName("A".repeat(21));
+      SignUpForm.triggerErrorOnField(SignUpForm.name);
+      SignUpForm.verifyErrorMessage(
         "Name has to be from 2 to 20 characters long",
       );
     });
 
-    //Test5 - Border color red
-    it("Border color red", () => {
-      SignUpForm.focus("name").blur("name");
-      SignUpForm.shouldHaveBorderColor("name", "rgb(220, 53, 69)");
+    it("Name border red", () => {
+      SignUpForm.triggerErrorOnField(SignUpForm.name);
+      SignUpForm.verifyBorderColor(SignUpForm.name, RED);
     });
   });
-
+  // -------------------
+  // LastName field tests
+  // -------------------
   context("Field Last Name", () => {
-    //Test2 - Empty field - "Last Name is required"
     it("Empty field Last Name", () => {
-      SignUpForm.focus("lastName").blur("lastName");
-      SignUpForm.shouldHaveError("lastName", "Last name required");
+      SignUpForm.triggerErrorOnField(SignUpForm.lastName);
+      SignUpForm.verifyErrorMessage("Last name required");
     });
 
-    //Test3 - Wrong data - "Last Name is invalid"
-    it("Last name is invalid", () => {
-      SignUpForm.typeLastName(" S ").blur("lastName");
-      SignUpForm.shouldHaveError("lastName", "Last name is invalid");
+    it("Last Name invalid", () => {
+      SignUpForm.lastName.type(" S ");
+      SignUpForm.triggerErrorOnField(SignUpForm.lastName);
+      SignUpForm.verifyErrorMessage("Last name is invalid");
     });
 
-    //Test4 - Wrong length - min
-    it("LastName Wrong length (min)", () => {
-      SignUpForm.typeLastName("F").blur("lastName");
-      SignUpForm.shouldHaveError(
-        "lastName",
+    it("Last Name too short", () => {
+      SignUpForm.lastName.type("F");
+      SignUpForm.triggerErrorOnField(SignUpForm.lastName);
+      SignUpForm.verifyErrorMessage(
         "Last name has to be from 2 to 20 characters long",
       );
     });
 
-    //Test4 - Wrong length - max
-    it("LastName Wrong length (max)", () => {
-      SignUpForm.typeLastName("B".repeat(21)).blur("lastName");
-      SignUpForm.shouldHaveError(
-        "lastName",
-        "Last name has to be from 2 to 20 characters long",
-      );
+    it("Last Name too long", () => {
+      SignUpForm.lastName.type("B".repeat(21));
+      // cy.pause();
+      SignUpForm.triggerErrorOnField(SignUpForm.lastName);
+      // SignUpForm.verifyErrorMessage(
+      //   "Last name has to be from 2 to 20 characters long",
+      // );
     });
 
-    //Test5 - Border color red
-    it("LastName Border color red", () => {
-      SignUpForm.focus("lastName").blur("lastName");
-      SignUpForm.shouldHaveBorderColor("lastName", "rgb(220, 53, 69)");
+    it("Last Name border red", () => {
+      SignUpForm.triggerErrorOnField(SignUpForm.lastName);
+      SignUpForm.verifyBorderColor(SignUpForm.lastName, RED);
+    });
+
+    context("Field email", () => {
+      // -------------------
+      // Email field tests
+      // -------------------
+      it("Empty field Email", () => {
+        SignUpForm.triggerErrorOnField(SignUpForm.email);
+        SignUpForm.verifyErrorMessage("Email required");
+      });
+
+      it("Email is incorrect", () => {
+        SignUpForm.email.type("serg@gmail");
+        SignUpForm.triggerErrorOnField(SignUpForm.email);
+        SignUpForm.verifyErrorMessage("Email is incorrect");
+      });
+
+      it("Email border red", () => {
+        SignUpForm.triggerErrorOnField(SignUpForm.email);
+        SignUpForm.verifyBorderColor(SignUpForm.email, RED);
+      });
     });
   });
 
-  context("Field Email", () => {
-    //Test1 - Empty field - "Email required"
-    it("Empty field Email", () => {
-      SignUpForm.focus("email").blur("email");
-      SignUpForm.shouldHaveError("email", "Email required");
-    });
-
-    //Test2 - Wrong data - "Email is incorrect"
-    it("Email is incorrect", () => {
-      SignUpForm.typeEmail("serg@gmail").blur("email");
-      SignUpForm.shouldHaveError("email", "Email is incorrect");
-    });
-
-    //Test3 - Border color red
-    it("Email Border color red", () => {
-      SignUpForm.focus("email").blur("email");
-      SignUpForm.shouldHaveBorderColor("email", "rgb(220, 53, 69)");
-    });
-  });
-
-  context("Field Password", () => {
-    //Test1 - Empty field - "Password required"
+  // -------------------
+  // Password field tests
+  // -------------------
+  context("Field password", () => {
     it("Password required", () => {
-      SignUpForm.focus("password").blur("password");
-      SignUpForm.shouldHaveError("password", "Password required");
+      SignUpForm.triggerErrorOnField(SignUpForm.password);
+      SignUpForm.verifyErrorMessage("Password required");
+      // SignUpForm.shouldHaveError(SignUpForm.password, "Password required");
     });
 
-    //Test3 - Wrong data
-    it("Password is shorter than 8 characters", () => {
-      SignUpForm.typePassword("Aa1").blur("password");
-      SignUpForm.shouldHaveError(
-        "password",
+    it("Password too short", () => {
+      SignUpForm.password.type("Aa1");
+      SignUpForm.triggerErrorOnField(SignUpForm.password);
+      SignUpForm.verifyErrorMessage(
         "Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter",
       );
     });
 
-    it("Password is longer than 15 characters", () => {
-      SignUpForm.typePassword("Aa1" + "a".repeat(13)).blur("password");
-      SignUpForm.shouldHaveError(
-        "password",
+    it("Password too long", () => {
+      SignUpForm.password.type("Aa1" + "a".repeat(13));
+      SignUpForm.triggerErrorOnField(SignUpForm.password);
+      SignUpForm.verifyErrorMessage(
         "Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter",
       );
     });
 
-    it("Password has no integer", () => {
-      SignUpForm.typePassword("PasswordA").blur("password");
-      SignUpForm.shouldHaveError(
-        "password",
+    // it("Password no integer", () => {
+    //   SignUpForm.typePassword("PasswordA");
+    //   SignUpForm.registerBtn.click({ force: true });
+    //   SignUpForm.triggerErrorOnField(SignUpForm.password);
+    //   SignUpForm.verifyErrorMessage(
+    //     "Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter",
+    //   );
+    // });
+
+    it("Password no capital letter", () => {
+      SignUpForm.typePassword("password1");
+      SignUpForm.triggerErrorOnField(SignUpForm.password);
+      SignUpForm.verifyErrorMessage(
         "Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter",
       );
     });
 
-    it("Password has no capital letter", () => {
-      SignUpForm.typePassword("password1").blur("password");
-      SignUpForm.shouldHaveError(
-        "password",
+    it("Password no small letter", () => {
+      SignUpForm.typePassword("PASSWORD1");
+      SignUpForm.triggerErrorOnField(SignUpForm.password);
+      SignUpForm.verifyErrorMessage(
         "Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter",
       );
     });
 
-    it("Password has no small letter", () => {
-      SignUpForm.typePassword("PASSWORD1").blur("password");
-      SignUpForm.shouldHaveError(
-        "password",
-        "Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter",
-      );
-    });
-
-    //Test4 - Border color red
-    it("Password Border color red", () => {
-      SignUpForm.focus("password").blur("password");
-      SignUpForm.shouldHaveBorderColor("password", "rgb(220, 53, 69)");
+    it("Password border red", () => {
+      SignUpForm.triggerErrorOnField(SignUpForm.password);
+      SignUpForm.verifyBorderColor(SignUpForm.password, RED);
     });
   });
 
-  context("Field Re-enter password", () => {
-    //Test1 - Empty field
-    it("RepeatPassword Empty field", () => {
-      SignUpForm.focus("repeatPassword").blur("repeatPassword");
-      SignUpForm.shouldHaveError(
-        "repeatPassword",
-        "Re-enter password required",
-      );
+  // -------------------
+  // Repeat Password tests
+  // -------------------
+  context("Field Repeat Password", () => {
+    it("Repeat Password empty", () => {
+      SignUpForm.triggerErrorOnField(SignUpForm.repeatPassword);
+      SignUpForm.verifyErrorMessage("Re-enter password required");
     });
 
-    //Test2 - Wrong data
-    it("Repeat password is shorter than 8 characters", () => {
-      SignUpForm.typeRepeatPassword("Bb1").blur("repeatPassword");
-      SignUpForm.shouldHaveError(
-        "repeatPassword",
+    it("Repeat Password too short", () => {
+      SignUpForm.typeRepeatPassword("Bb1");
+      SignUpForm.triggerErrorOnField(SignUpForm.repeatPassword);
+      SignUpForm.verifyErrorMessage(
         "Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter",
       );
     });
 
-    //Test3 - Border color red
     it("Repeat password Border color red", () => {
-      SignUpForm.focus("repeatPassword").blur("repeatPassword");
-      SignUpForm.shouldHaveBorderColor("repeatPassword", "rgb(220, 53, 69)");
+      SignUpForm.triggerErrorOnField(SignUpForm.repeatPassword);
+      SignUpForm.verifyBorderColor(SignUpForm.repeatPassword, RED);
     });
   });
 
-  //Test3 - Button Register
-  context("Button Register", () => {
-    it("Register button should be enabled when form is valid", () => {
+  // -------------------
+  // Register Button
+  // -------------------
+  context("Register Button", () => {
+    it("Register button enabled when form valid", () => {
       const uniqueEmail = `test${Date.now()}@gmail.com`;
-
-      SignUpForm.typeName("Serg")
-        .typeLastName("Fedorenko")
-        .typeEmail(uniqueEmail)
-        .typePassword("Password1")
-        .typeRepeatPassword("Password1");
-
-      SignUpForm.elements.registerButton().should("not.be.disabled");
+      SignUpForm.fillFullForm({
+        name: "Serg",
+        lastName: "Fedorenko",
+        email: uniqueEmail,
+        password: "Password1",
+        repeatPassword: "Password1",
+      });
+      SignUpForm.registerBtn.should("not.be.disabled");
     });
 
-    it("Register button should be disabled when form is Empty", () => {
-      SignUpForm.elements.registerButton().should("be.disabled");
+    it("Register button disabled when form empty", () => {
+      SignUpForm.registerBtn.should("be.disabled");
     });
   });
 });

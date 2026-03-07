@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cypress:open": "npx cypress open",
+    "cypress:run": "npx cypress run",
+    "cy:open": "npx cypress open --config-file ./cypress2.config.js"
   },
   "keywords": [],
   "author": "",
