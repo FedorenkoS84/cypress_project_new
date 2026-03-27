@@ -4,8 +4,12 @@ module.exports = defineConfig({
   allowCypressEnv: false,
 
   e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
+    baseUrl: "https://qauto.forstudy.space",
+    setupNodeEvents(on, config) {},
+  },
+
+  env: {
+    username: "guest",
+    password: "welcome2qauto",
   },
 });
