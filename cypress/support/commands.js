@@ -23,3 +23,19 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+// Кастомна команда для створення витрати (expense) через API
+Cypress.Commands.add("createExpense", (carId, expenseData) => {
+  return cy.request({
+    method: "POST",
+    url: "/api/expenses",
+    body: {
+      carId: carId,
+      reportedAt: expenseData.reportedAt,
+      mileage: expenseData.mileage,
+      liters: expenseData.liters,
+      totalCost: expenseData.totalCost,
+      forceMileage: false,
+    },
+  });
+});
