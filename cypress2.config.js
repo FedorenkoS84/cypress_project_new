@@ -3,8 +3,7 @@ const { defineConfig } = require("cypress");
 module.exports = defineConfig({
   reporter: "cypress-mochawesome-reporter",
   e2e: {
-    baseUrl: "https://qauto.forstudy.space",
-    // require("cypress-mochawesome-reporter/plugin")(on)
+    baseUrl: "https://qauto2.forstudy.space/",
   },
   env: {
     username: "guest",
