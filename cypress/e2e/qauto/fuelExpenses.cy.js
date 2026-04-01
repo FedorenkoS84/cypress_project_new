@@ -21,6 +21,7 @@ describe("Fuel Expenses Modal Verification", () => {
     cy.url().should("include", "/panel/garage");
 
     GaragePage.openAddCarModal();
+    GaragePage.modalContent.should("be.visible");
     GaragePage.fillCarData("BMW", "X5", "50000");
     GaragePage.addBtn.click();
     cy.get(".modal-content").should("not.exist");
