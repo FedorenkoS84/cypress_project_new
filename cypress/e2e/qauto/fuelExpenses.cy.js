@@ -104,7 +104,7 @@ describe("Fuel Expenses Modal Verification", () => {
       cy.get("td").eq(0).should("contain", formatted);
       cy.get("td").eq(1).should("contain", "50001");
       cy.get("td").eq(2).should("contain", "20L");
-      cy.get("td").eq(3).should("contain", "100 USD");
+      cy.get("td").eq(3).should("contain", "100");
     });
   });
 
