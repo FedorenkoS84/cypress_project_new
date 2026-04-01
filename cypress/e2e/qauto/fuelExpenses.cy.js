@@ -95,9 +95,12 @@ describe("Fuel Expenses Modal Verification", () => {
     FuelExpenses.totalCostInput.type("100");
     FuelExpenses.addBtn.should("be.enabled").click();
 
+    const today = new Date();
+    const formatted = `${String(today.getDate()).padStart(2, "0")}.${String(today.getMonth() + 1).padStart(2, "0")}.${today.getFullYear()}`;
+
     FuelExpenses.modalContent.should("not.exist");
     FuelExpenses.tableRows.first().within(() => {
-      cy.get("td").eq(0).should("contain", "07.03.2026");
+      cy.get("td").eq(0).should("contain", formatted);
       cy.get("td").eq(1).should("contain", "50001");
       cy.get("td").eq(2).should("contain", "20L");
       cy.get("td").eq(3).should("contain", "100 USD");
