@@ -62,30 +62,23 @@ class GaragePage {
 
   fillCarData(brand, model, mileage) {
     this.brandSelect.select(brand);
-    this.modelSelect.select(model);
+    this.modelSelect.should("contain", model).select(model);
     this.mileageInput.type(mileage);
+  }
+
+  // Метод для очищення всіх машин через API (Post-condition)
+  clearAllCarsViaApi() {
+    const auth = {
+      username: Cypress.env("username") || "guest",
+      password: Cypress.env("password") || "welcome2qauto",
+    };
+
+    cy.request({ method: "GET", url: "/api/cars", auth }).then((res) => {
+      res.body.data.forEach((car) => {
+        cy.request({ method: "DELETE", url: `/api/cars/${car.id}`, auth });
+      });
+    });
   }
 }
 
 export default new GaragePage();
-// class GaragePage {
-//   get sighInButton() {
-//     return cy.get(".header_signin").should("be.visible");
-//   }
-//   openSignInForm() {
-//     this.sighInButton.click();
-//   }
-//   get pageTitle() {
-//     return cy.contains("h1", "Garage");
-//   }
-//   visit() {
-//     cy.visit("/", {
-//       auth: {
-//         username: Cypress.env("username"),
-//         password: Cypress.env("password"),
-//       },
-//     });
-//   }
-// }
-
-// export default new GaragePage();
